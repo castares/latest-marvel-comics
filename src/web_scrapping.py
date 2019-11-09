@@ -1,3 +1,6 @@
+import requests
+from bs4 import BeautifulSoup
+import pandas as pd
 
 def cooksoup(url, parser='html.parser'):
     #returns a BeautifulSoup for a given url. 
@@ -29,9 +32,5 @@ def main():
     return marvel_previews.to_csv("../output/marvel_previews.csv")
 
 if __name__=="__main__":
-    
-    import requests
-    from bs4 import BeautifulSoup
-    import pandas as pd
     main()
 
