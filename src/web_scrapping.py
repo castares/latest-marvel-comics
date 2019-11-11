@@ -13,7 +13,7 @@ def scrap_to_df(search):
     lst= []
     for e in search:
         lst.append(e.text.strip().split('\n'))
-    return pd.DataFrame(lst)
+    return pd.DataFrame(lst, index=False)
 
 def main():
     #Cook the soup.

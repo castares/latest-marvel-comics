@@ -4,10 +4,12 @@ def main():
     #1st DataFrame: Characters Info.
     dataset = pd.read_csv("../input/marvel_characters_info.csv")
     dataset.drop(['ID','SkinColor', 'Publisher'], axis=1, inplace=True)
+    dataset.drop_duplicates(subset='Name', keep='first', inplace=True)
     #Only 35 rows (of a total of 388) have a value in skin color. 
     #Since this column is not necessary for the objectives of this work, we are going to remove it. 
     #Publisher column is no longer necessary, since later we keep only the rows matching Marvel Characters
     #The ID on this column will be replaced by the one from the Marvel API. We drop this one.
+    #Some rows were duplicated, with slight differences on some values. We remove duplicates keeping the first unique value.
 
     #2nd DataFrame: Characters comics:
     df2 = pd.read_csv("../input/charactersToComics.csv")
@@ -24,7 +26,7 @@ def main():
     #This merge removes all non-Marvel Characters.
     #Finally, we merge both datasets and export the result to a csv.
     dataset = dataset.merge(comics_count, on='Name')
-    dataset.to_csv("../output/dataset.csv")
+    dataset.to_csv("../output/dataset.csv", index=False)
 
 if __name__=="__main__":
     main()

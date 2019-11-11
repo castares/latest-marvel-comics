@@ -4,6 +4,7 @@ import hashlib
 from dotenv import load_dotenv
 import time
 import pandas as pd
+import re
 
 load_dotenv()
 
@@ -48,7 +49,7 @@ def RequestLoop(dataset):
         images.append(data['thumbnail']['path']+"/portrait_fantastic.jpg")
         #keeping only the name of the series.
         series.append([e['name'] for e in data['series']['items']])
-    api_dataframe = pd.DataFrame({'Name':names, 'Images':images,'Series':series})
+        api_dataframe = pd.DataFrame({'Name':names, 'Images':images,'Series':series}, index=False)
     return api_dataframe
 
 
