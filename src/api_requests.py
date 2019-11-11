@@ -3,6 +3,7 @@ import requests
 import hashlib
 from dotenv import load_dotenv
 import time
+import pandas as pd
 
 load_dotenv()
 
@@ -24,7 +25,7 @@ def hash(ts, public_key, private_key):
 
 def MarvelRequest(resource):
     #Given a resource, this function makes a call to the Marvel API
-    url = "http://gateway.marvel.com/v1/public{}".format(resource)
+    url = "http://gateway.marvel.com/v1/public/characters?name={}".format(resource)
     payload = {
         'ts': ts, 
         'apikey': public_key, 
@@ -34,18 +35,30 @@ def MarvelRequest(resource):
     print(r.url)
     return r
 
+def RequestLoop(dataset):
+    names = []
+    images = []
+    series = []
+    for e in dataset["Name"]:
+        answer = MarvelRequest(e).json()
+        print("Request for {} completed".format(e))
+        data = answer['data']['results'][0]
+        names.append(data['name'])
+        #completing the path of the images: https://developer.marvel.com/documentation/images
+        images.append(data['thumbnail']['path']+"/portrait_fantastic.jpg")
+        #keeping only the name of the series.
+        series.append([e['name'] for e in data['series']['items']])
+    api_dataframe = pd.DataFrame({'Name':names, 'Images':images,'Series':series})
+    return api_dataframe
 
 
 def main():
-    answer = MarvelRequest("/characters?").json()
-    data = answer['data']['results']
-    names = []
-    images = []
-    series = []    
-    for e in data:
-        names.append(e['name'])
-        images.append(e['thumbnail'])
-        series.append(e['series'])
+    #Getting Character's data.
+    dataset = pd.read_csv("../output/dataset.csv")
+    data_output = RequestLoop(dataset)
+    data_output.to_csv("../output/api_dataset.csv")
+    return "Done" #Filtering out name, images and series.
+
 
 
 if __name__=="__main__":
