@@ -49,7 +49,7 @@ def RequestLoop(dataset):
         images.append(data['thumbnail']['path']+"/portrait_fantastic.jpg")
         #keeping only the name of the series.
         series.append([e['name'] for e in data['series']['items']])
-        api_dataframe = pd.DataFrame({'Name':names, 'Images':images,'Series':series}, index=False)
+        api_dataframe = pd.DataFrame({'Name':names, 'Images':images,'Series':series})
     return api_dataframe
 
 
